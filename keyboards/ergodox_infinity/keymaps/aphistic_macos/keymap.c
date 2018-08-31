@@ -1,3 +1,6 @@
+// See https://github.com/bbcmicrobit/micropython/issues/514#issuecomment-404759614
+// for build issues on Ubuntu 18.04 LTS
+
 #include QMK_KEYBOARD_H
 #include "debug.h"
 #include "action_layer.h"
@@ -42,13 +45,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // left hand
   KC_ESC,     KC_1,         KC_2,    KC_3,    KC_4,    KC_5, KC_6,
   KC_TAB,     KC_Q,         KC_W,    KC_E,    KC_R,    KC_T, KC_LBRC,
-  KC_LCTL,    KC_A,         KC_S,    KC_D,    KC_F,    KC_G, /*NONE*/
+  KC_LGUI,    KC_A,         KC_S,    KC_D,    KC_F,    KC_G, /*NONE*/
   KC_LSFT,    KC_Z,         KC_X,    KC_C,    KC_V,    KC_B, KC_EQL,
   KC_GRV,     KC_INS,       XXXXXXX, XXXXXXX, KC_LALT,
 
   XXXXXXX,            TG(LAYER2),
   /*NONE*/            XXXXXXX,
-  KC_SPC, MO(LAYER1), KC_LGUI,
+  KC_SPC, MO(LAYER1), LCTL(KC_LGUI),
 
   // right hand
   KC_6,    KC_7,   KC_8,    KC_9,     KC_0,    KC_MINS,  KC_BSPC,
@@ -57,9 +60,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_EQL,  KC_N,   KC_M,    KC_COMM,  KC_DOT,  KC_SLSH,  KC_RSFT,
   KC_LEFT, KC_UP,  KC_DOWN, KC_RIGHT, KC_RCTL,
 
-  TG(LAYER2), XXXXXXX,
-  XXXXXXX,    /*NONE*/
-  KC_LGUI,    MO(LAYER1), KC_ENT
+  TG(LAYER2),    XXXXXXX,
+  XXXXXXX,       /*NONE*/
+  RCTL(KC_RGUI), MO(LAYER1), KC_ENT
 ),
 /* Keymap 1: Symbol Layer
  *
@@ -154,25 +157,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 const uint16_t PROGMEM fn_actions[] = {
-  //    [1] = ACTION_LAYER_TAP_TOGGLE()                // FN1 - Momentary Layer 1 (Symbols)
+  //    [1] = ACTION_LAYER_TAP_TOGGLE(SYMB)                // FN1 - Momentary Layer 1 (Symbols)
 };
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
   // MACRODOWN only works in this function
-  switch(id) {
-    case 0:
-      if (record->event.pressed) {
-        SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
+      switch(id) {
+        case 0:
+        if (record->event.pressed) {
+          SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
+        }
+        break;
+        case 1:
+        if (record->event.pressed) { // For resetting EEPROM
+          eeconfig_init();
+        }
+        break;
       }
-      break;
-    case 1:
-      if (record->event.pressed) { // For resetting EEPROM
-        eeconfig_init();
-      }
-      break;
-  }
-  return MACRO_NONE;
+    return MACRO_NONE;
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -204,84 +207,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
-#ifdef RGBLIGHT_COLOR_LAYER_0
-  rgblight_setrgb(RGBLIGHT_COLOR_LAYER_0);
-#endif
+
 };
+
 
 // Runs constantly in the background, in a loop.
 void matrix_scan_user(void) {
 
-};
+    uint8_t layer = biton32(layer_state);
 
-// Runs whenever there is a layer state change.
-uint32_t layer_state_set_user(uint32_t state) {
-  ergodox_board_led_off();
-  ergodox_right_led_1_off();
-  ergodox_right_led_2_off();
-  ergodox_right_led_3_off();
-
-  uint8_t layer = biton32(state);
-  switch (layer) {
-      case 0:
-        #ifdef RGBLIGHT_COLOR_LAYER_0
-          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_0);
-        #else
-        #ifdef RGBLIGHT_ENABLE
-          rgblight_init();
-        #endif
-        #endif
-        break;
-      case 1:
-        ergodox_right_led_1_on();
-        #ifdef RGBLIGHT_COLOR_LAYER_1
-          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_1);
-        #endif
-        break;
-      case 2:
-        ergodox_right_led_2_on();
-        #ifdef RGBLIGHT_COLOR_LAYER_2
-          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_2);
-        #endif
-        break;
-      case 3:
-        ergodox_right_led_3_on();
-        #ifdef RGBLIGHT_COLOR_LAYER_3
-          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_3);
-        #endif
-        break;
-      case 4:
-        ergodox_right_led_1_on();
-        ergodox_right_led_2_on();
-        #ifdef RGBLIGHT_COLOR_LAYER_4
-          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_4);
-        #endif
-        break;
-      case 5:
-        ergodox_right_led_1_on();
-        ergodox_right_led_3_on();
-        #ifdef RGBLIGHT_COLOR_LAYER_5
-          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_5);
-        #endif
-        break;
-      case 6:
-        ergodox_right_led_2_on();
-        ergodox_right_led_3_on();
-        #ifdef RGBLIGHT_COLOR_LAYER_6
-          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_6);
-        #endif
-        break;
-      case 7:
-        ergodox_right_led_1_on();
-        ergodox_right_led_2_on();
-        ergodox_right_led_3_on();
-        #ifdef RGBLIGHT_COLOR_LAYER_7
-          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_6);
-        #endif
-        break;
-      default:
-        break;
+    ergodox_board_led_off();
+    ergodox_right_led_1_off();
+    ergodox_right_led_2_off();
+    ergodox_right_led_3_off();
+    switch (layer) {
+      // TODO: Make this relevant to the ErgoDox EZ.
+        case 1:
+            ergodox_right_led_1_on();
+            break;
+        case 2:
+            ergodox_right_led_2_on();
+            break;
+        default:
+            // none
+            break;
     }
 
-  return state;
 };

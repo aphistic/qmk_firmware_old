@@ -58,7 +58,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_RBRC, KC_Y,   KC_U,    KC_I,     KC_O,    KC_P,     KC_BSLS,
   /*NONE*/ KC_H,   KC_J,    KC_K,     KC_L,    KC_SCLN,  KC_QUOT,
   KC_EQL,  KC_N,   KC_M,    KC_COMM,  KC_DOT,  KC_SLSH,  KC_RSFT,
-  KC_LEFT, KC_UP,  KC_DOWN, KC_RIGHT, XXXXXXX,
+  KC_LEFT, KC_UP,  KC_DOWN, KC_RIGHT, KC_RCTL,
 
   TG(LAYER2), XXXXXXX,
   XXXXXXX,    /*NONE*/
@@ -94,9 +94,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, _______, _______, _______, _______, _______, _______,
   _______, _______, _______, _______, _______,
 
-  RGB_MOD,KC_TRNS,
-  /*NONE*/ KC_TRNS,
-  RGB_VAD,RGB_VAI,KC_TRNS,
+  _______, _______,
+  /*NONE*/ _______,
+  _______, _______, _______,
 
   // right hand
   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_DEL,
@@ -105,9 +105,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, _______, _______, _______, _______, _______, _______,
   KC_HOME, KC_PGUP, KC_PGDN, KC_END,  _______,
 
-  RGB_TOG, RGB_SLD,
-  KC_TRNS, /*NONE*/
-  KC_TRNS, RGB_HUD, RGB_HUI
+  _______, _______,
+  _______, /*NONE*/
+  _______, _______, _______
 ),
 /* Keymap 2: Media and mouse keys
  *
