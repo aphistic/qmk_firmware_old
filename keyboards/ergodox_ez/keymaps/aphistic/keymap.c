@@ -3,39 +3,21 @@
 #include "action_layer.h"
 #include "version.h"
 
-#define BASE   0 // default layer
-#define LAYER1 1 // layer 1
-#define LAYER2 2 // layer 2
+#define BASE       0 // default layer
+#define MACOS_BASE 1
+#define LAYER1     10 // layer 1
+#define LAYER2     11 // layer 2
 
 enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
   EPRM,
   VRSN,
-  RGB_SLD
+  RGB_SLD,
+  SEND_BASE,
+  SEND_MACOS
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-/* Keymap 0: Basic layer
- *
- * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |   =    |   1  |   2  |   3  |   4  |   5  | LEFT |           | RIGHT|   6  |   7  |   8  |   9  |   0  |   -    |
- * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | Del    |   Q  |   W  |   E  |   R  |   T  |  L1  |           |  L1  |   Y  |   U  |   I  |   O  |   P  |   \    |
- * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | BkSp   |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |; / L2|' / Cmd |
- * |--------+------+------+------+------+------| Hyper|           | Meh  |------+------+------+------+------+--------|
- * | LShift |Z/Ctrl|   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |//Ctrl| RShift |
- * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |Grv/L1|  '"  |AltShf| Left | Right|                                       |  Up  | Down |   [  |   ]  | ~L1  |
- *   `----------------------------------'                                       `----------------------------------'
- *                                        ,-------------.       ,-------------.
- *                                        | App  | LGui |       | Alt  |Ctrl/Esc|
- *                                 ,------|------|------|       |------+--------+------.
- *                                 |      |      | Home |       | PgUp |        |      |
- *                                 | Space|Backsp|------|       |------|  Tab   |Enter |
- *                                 |      |ace   | End  |       | PgDn |        |      |
- *                                 `--------------------'       `----------------------'
- */
 // If it accepts an argument (i.e, is a function), it doesn't need KC_.
 // Otherwise, it needs KC_*
 [BASE] = LAYOUT_ergodox(  // layer 0 : default
@@ -46,7 +28,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_LSFT,    KC_Z,         KC_X,    KC_C,    KC_V,    KC_B, KC_EQL,
   KC_GRV,     KC_INS,       XXXXXXX, XXXXXXX, KC_LALT,
 
-  XXXXXXX,            TG(LAYER2),
+  XXXXXXX,            DF(MACOS_BASE),
   /*NONE*/            XXXXXXX,
   KC_SPC, MO(LAYER1), KC_LGUI,
 
@@ -57,32 +39,33 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_EQL,  KC_N,    KC_M,  KC_COMM,  KC_DOT,  KC_SLSH,  KC_RSFT,
   KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, KC_RCTL,
 
-  TG(LAYER2), XXXXXXX,
+  TG(LAYER2), SEND_BASE,
   XXXXXXX,    /*NONE*/
   KC_LGUI,    MO(LAYER1), KC_ENT
 ),
-/* Keymap 1: Symbol Layer
- *
- * ,---------------------------------------------------.           ,--------------------------------------------------.
- * |Version  |  F1  |  F2  |  F3  |  F4  |  F5  |      |           |      |  F6  |  F7  |  F8  |  F9  |  F10 |   F11  |
- * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
- * |         |   !  |   @  |   {  |   }  |   |  |      |           |      |   Up |   7  |   8  |   9  |   *  |   F12  |
- * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |   #  |   $  |   (  |   )  |   `  |------|           |------| Down |   4  |   5  |   6  |   +  |        |
- * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |   %  |   ^  |   [  |   ]  |   ~  |      |           |      |   &  |   1  |   2  |   3  |   \  |        |
- * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   | EPRM  |      |      |      |      |                                       |      |    . |   0  |   =  |      |
- *   `-----------------------------------'                                       `----------------------------------'
- *                                        ,-------------.       ,-------------.
- *                                        |Animat|      |       |Toggle|Solid |
- *                                 ,------|------|------|       |------+------+------.
- *                                 |Bright|Bright|      |       |      |Hue-  |Hue+  |
- *                                 |ness- |ness+ |------|       |------|      |      |
- *                                 |      |      |      |       |      |      |      |
- *                                 `--------------------'       `--------------------'
- */
-// SYMBOLS
+[MACOS_BASE] = LAYOUT_ergodox(  // layer 0 : default
+    // left hand
+    KC_ESC,     KC_1,         KC_2,    KC_3,    KC_4,    KC_5, KC_6,
+    KC_TAB,     KC_Q,         KC_W,    KC_E,    KC_R,    KC_T, KC_LBRC,
+    KC_LGUI,    KC_A,         KC_S,    KC_D,    KC_F,    KC_G, /*NONE*/
+    KC_LSFT,    KC_Z,         KC_X,    KC_C,    KC_V,    KC_B, KC_EQL,
+    KC_GRV,     KC_INS,       XXXXXXX, XXXXXXX, KC_LALT,
+
+    DF(BASE),           DF(BASE),
+    /*NONE*/            XXXXXXX,
+    KC_SPC, MO(LAYER1), LCTL(KC_LGUI),
+
+    // right hand
+    KC_6,    KC_7,    KC_8,  KC_9,     KC_0,    KC_MINS,  KC_BSPC,
+    KC_RBRC, KC_Y,    KC_U,  KC_I,     KC_O,    KC_P,     KC_BSLS,
+    /*NONE*/ KC_H,    KC_J,  KC_K,     KC_L,    KC_SCLN,  KC_QUOT,
+    KC_EQL,  KC_N,    KC_M,  KC_COMM,  KC_DOT,  KC_SLSH,  KC_RSFT,
+    KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, KC_RCTL,
+
+    TG(LAYER2),    SEND_MACOS,
+    XXXXXXX,       /*NONE*/
+    RCTL(KC_RGUI), MO(LAYER1), KC_ENT
+),
 [LAYER1] = LAYOUT_ergodox(
   // left hand
   _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,
@@ -106,28 +89,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, /*NONE*/
   _______, _______, _______
 ),
-/* Keymap 2: Media and mouse keys
- *
- * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
- * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * |        |      |      | MsUp |      |      |      |           |      |      |      |      |      |      |        |
- * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |        |      |MsLeft|MsDown|MsRght|      |------|           |------|      |      |      |      |      |  Play  |
- * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |        |      |      |      |      |      |      |           |      |      |      | Prev | Next |      |        |
- * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |      |      |      | Lclk | Rclk |                                       |VolUp |VolDn | Mute |      |      |
- *   `----------------------------------'                                       `----------------------------------'
- *                                        ,-------------.       ,-------------.
- *                                        |      |      |       |      |      |
- *                                 ,------|------|------|       |------+------+------.
- *                                 |      |      |      |       |      |      |Brwser|
- *                                 |      |      |------|       |------|      |Back  |
- *                                 |      |      |      |       |      |      |      |
- *                                 `--------------------'       `--------------------'
- */
-// MEDIA AND MOUSE
 [LAYER2] = LAYOUT_ergodox(
   // left hand
   RESET,   _______, _______, _______, _______, _______, _______,
@@ -177,27 +138,35 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    // dynamically generate these.
-    case EPRM:
+  case SEND_BASE:
+      if (!record->event.pressed) {
+          SEND_STRING("layer: base");
+      }
+      break;
+  case SEND_MACOS:
+      if (!record->event.pressed) {
+          SEND_STRING("layer: macos");
+      }
+      break;
+
+      // dynamically generate these.
+  case EPRM:
       if (record->event.pressed) {
-        eeconfig_init();
+          eeconfig_init();
       }
       return false;
-      break;
-    case VRSN:
+  case VRSN:
       if (record->event.pressed) {
-        SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
+          SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
       }
       return false;
-      break;
-    case RGB_SLD:
+  case RGB_SLD:
       if (record->event.pressed) {
-        #ifdef RGBLIGHT_ENABLE
+#ifdef RGBLIGHT_ENABLE
           rgblight_mode(1);
-        #endif
+#endif
       }
       return false;
-      break;
   }
   return true;
 }
