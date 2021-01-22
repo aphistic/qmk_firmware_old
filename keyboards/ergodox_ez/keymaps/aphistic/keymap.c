@@ -72,8 +72,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // left hand
   _______, KC_F1,       KC_F2,       KC_F3,       KC_F4,       KC_F5,       KC_F6,
   _______, KC_CA(KC_Q), KC_CA(KC_W), KC_CA(KC_E), KC_CA(KC_R), KC_CA(KC_T), _______,
-  _______, _______, _______, _______, _______, _______,     /*NONE*/
-  _______, _______, _______, _______, _______, _______,     _______,
+  _______, KC_CA(KC_A), KC_CA(KC_S), KC_CA(KC_D), KC_CA(KC_F), KC_CA(KC_G), /*NONE*/
+  _______, KC_CA(KC_Z), KC_CA(KC_X), KC_CA(KC_C), KC_CA(KC_V), KC_CA(KC_B), _______,
   _______, _______, _______, _______, _______,
 
   _______, _______,
